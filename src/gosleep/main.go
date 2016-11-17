@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/jessevdk/go-flags"
-	"gopkg.in/cheggaaa/pb.v1"
 	jinzhuNow "github.com/jinzhu/now"
+	"gopkg.in/cheggaaa/pb.v1"
 )
 
 type sleepFlags struct {
