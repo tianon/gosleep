@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
+	"github.com/fatih/color"
 	"github.com/jessevdk/go-flags"
 	jinzhuNow "github.com/jinzhu/now"
 	"gopkg.in/cheggaaa/pb.v1"
@@ -13,6 +15,8 @@ import (
 type sleepFlags struct {
 	For   bool `long:"for"`
 	Until bool `long:"until"`
+
+	NoColor bool `long:"no-color"`
 }
 
 func main() {
@@ -77,6 +81,16 @@ func main() {
 	bar.ShowTimeLeft = false
 	bar.ShowFinalTime = false
 	bar.SetUnits(pb.U_DURATION)
+
+	if !opts.NoColor {
+		bar.Format(strings.Join([]string{
+			color.YellowString(" 🕤 "),
+			color.GreenString("┅"),   // [xxx    ]
+			color.RedString("♥"), // [   x   ]
+			color.MagentaString("┄"),     // [    xxx]
+			color.YellowString(" 🕔 "),
+		}, "\x00"))
+	}
 
 	bar.Start()
 	for now := time.Now(); now.Before(until); now = time.Now() {
