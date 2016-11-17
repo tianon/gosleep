@@ -2,6 +2,18 @@
 	"version": 0,
 	"dependencies": [
 		{
+			"importpath": "github.com/jessevdk/go-flags",
+			"repository": "https://github.com/jessevdk/go-flags",
+			"revision": "8bc97d602c3bfeb5fc6fc9b5a9c898f245495637",
+			"branch": "master"
+		},
+		{
+			"importpath": "github.com/jinzhu/now",
+			"repository": "https://github.com/jinzhu/now",
+			"revision": "d9861969c7a7e84746d341c09020c2ef8a617f8f",
+			"branch": "master"
+		},
+		{
 			"importpath": "gopkg.in/cheggaaa/pb.v1",
 			"repository": "https://gopkg.in/cheggaaa/pb.v1",
 			"revision": "dd61faab99a777c652bb680e37715fe0cb549856",
