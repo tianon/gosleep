@@ -2,12 +2,6 @@
 	"version": 0,
 	"dependencies": [
 		{
-			"importpath": "github.com/fatih/color",
-			"repository": "https://github.com/fatih/color",
-			"revision": "bf82308e8c8546dc2b945157173eb8a959ae9505",
-			"branch": "master"
-		},
-		{
 			"importpath": "github.com/jessevdk/go-flags",
 			"repository": "https://github.com/jessevdk/go-flags",
 			"revision": "8bc97d602c3bfeb5fc6fc9b5a9c898f245495637",
@@ -20,22 +14,17 @@
 			"branch": "master"
 		},
 		{
-			"importpath": "github.com/mattn/go-colorable",
-			"repository": "https://github.com/mattn/go-colorable",
-			"revision": "d228849504861217f796da67fae4f6e347643f15",
+			"importpath": "go.tianon.xyz/progress",
+			"repository": "https://github.com/tianon/go-progress.git",
+			"revision": "7e2b41cc4d65d89596d6e1b2b774ca51b7694795",
 			"branch": "master"
 		},
 		{
-			"importpath": "github.com/mattn/go-isatty",
-			"repository": "https://github.com/mattn/go-isatty",
-			"revision": "66b8e73f3f5cda9f96b69efd03dd3d7fc4a5cdb8",
-			"branch": "master"
-		},
-		{
-			"importpath": "gopkg.in/cheggaaa/pb.v1",
-			"repository": "https://gopkg.in/cheggaaa/pb.v1",
-			"revision": "dd61faab99a777c652bb680e37715fe0cb549856",
-			"branch": "master"
+			"importpath": "golang.org/x/crypto/ssh/terminal",
+			"repository": "https://go.googlesource.com/crypto",
+			"revision": "9477e0b78b9ac3d0b03822fd95422e2fe07627cd",
+			"branch": "master",
+			"path": "/ssh/terminal"
 		}
 	]
 }

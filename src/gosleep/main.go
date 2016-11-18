@@ -3,20 +3,16 @@ package main
 import (
 	"fmt"
 	"os"
-	"strings"
 	"time"
 
-	"github.com/fatih/color"
 	"github.com/jessevdk/go-flags"
 	jinzhuNow "github.com/jinzhu/now"
-	"gopkg.in/cheggaaa/pb.v1"
+	"go.tianon.xyz/progress"
 )
 
 type sleepFlags struct {
 	For   bool `long:"for"`
 	Until bool `long:"until"`
-
-	NoColor bool `long:"no-color"`
 }
 
 func main() {
@@ -75,27 +71,25 @@ func main() {
 		os.Exit(1)
 	}
 
-	bar := pb.New64(until.Sub(start).Nanoseconds())
-	bar.ShowCounters = true
-	bar.ShowPercent = true
-	bar.ShowTimeLeft = false
-	bar.ShowFinalTime = false
-	bar.SetUnits(pb.U_DURATION)
+	bar := progress.NewBar(os.Stdout)
+	bar.Min = start.Unix()
+	bar.Max = until.Unix()
 
-	if !opts.NoColor {
-		bar.Format(strings.Join([]string{
-			color.YellowString(" 🕤 "),
-			color.GreenString("┅"),   // [xxx    ]
-			color.RedString("♥"), // [   x   ]
-			color.MagentaString("┄"),     // [    xxx]
-			color.YellowString(" 🕔 "),
-		}, "\x00"))
+	now := start
+	bar.Val = now.Unix()
+	bar.Prefix = func(b *progress.Bar) string {
+		return fmt.Sprintf(" %s / %s [", now.Sub(start).String(), until.Sub(start).String())
+	}
+	bar.Suffix = func(b *progress.Bar) string {
+		return fmt.Sprintf("] % 3.01f%% ", b.Progress()*100)
 	}
 
 	bar.Start()
-	for now := time.Now(); now.Before(until); now = time.Now() {
-		bar.Set64(now.Round(round).Sub(start).Nanoseconds())
+	for now = start; now.Before(until); now = time.Now().Round(round) {
+		bar.Val = now.Unix()
+		bar.Tick()
 		time.Sleep(increment)
 	}
+	bar.Val = now.Unix()
 	bar.Finish()
 }
