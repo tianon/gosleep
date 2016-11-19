@@ -81,7 +81,7 @@ func main() {
 		return fmt.Sprintf(" %s / %s [", now.Sub(start).String(), until.Sub(start).String())
 	}
 	bar.Suffix = func(b *progress.Bar) string {
-		return fmt.Sprintf("] %3.01f%% ", b.Progress()*100)
+		return fmt.Sprintf("] % 3.01f%% ", b.Progress()*100)
 	}
 
 	bar.Start()
