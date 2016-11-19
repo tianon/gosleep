@@ -18,7 +18,7 @@ type Bar struct {
 
 	Phases []string
 
-	out *os.File
+	Out *os.File
 }
 
 var DefaultPhases = []string{
@@ -33,30 +33,33 @@ var DefaultPhases = []string{
 	"█",
 }
 
+// create a new progress bar targeted at "out" (can be "nil" if "TickString" is intended use of bar)
 func NewBar(out *os.File) *Bar {
 	return &Bar{
 		Prefix: func(_ *Bar) string { return " [" },
 		Suffix: func(_ *Bar) string { return "] " },
 		Phases: DefaultPhases,
 
-		out: out,
+		Out: out,
 	}
 }
 
+// start progress bar output (invokes Tick())
 func (b *Bar) Start() {
 	// TODO if isatty
-	//b.out.Write([]byte("\x1b[?25l")) // hide cursor?
+	//b.Out.Write([]byte("\x1b[?25l")) // hide cursor?
 	b.Tick()
 }
 
+// finish progress bar output (writes "\n")
 func (b *Bar) Finish() {
 	b.Tick()
-	b.out.Write([]byte("\n"))
+	b.Out.Write([]byte("\n"))
 	// TODO if isatty
-	//b.out.Write([]byte("\x1b[?25h")) // show cursor?
+	//b.Out.Write([]byte("\x1b[?25h")) // show cursor?
 }
 
-// percentage, normalized to 0-100%
+// current percentage (b.Val along the line b.Min <-> b.Max), normalized to 0-100% as a 0.0-1.0 float64
 func (b *Bar) Progress() float64 {
 	if b.Min >= b.Max {
 		// ignore bad values like cowards
@@ -68,25 +71,44 @@ func (b *Bar) Progress() float64 {
 	if b.Val > b.Max {
 		return 1.0
 	}
-	return float64(b.Val - b.Min) / float64(b.Max - b.Min)
+	return float64(b.Val-b.Min) / float64(b.Max-b.Min)
 }
 
-func (b *Bar) TickString() string {
-	progress := b.Progress()
+// width of terminal "out" or -1
+func TermWidth(out *os.File) int {
+	if terminal.IsTerminal(int(out.Fd())) {
+		w, _, err := terminal.GetSize(int(out.Fd()))
+		if err == nil {
+			return w
+		}
+	}
+	return -1
+}
 
-	//prefix := fmt.Sprintf("%d / %d %s", b.Value, b.Total, b.Prefix)
+// update progress bar output
+func (b *Bar) Tick() {
+	width := TermWidth(b.Out)
+	if width < 0 {
+		width = 80
+	}
+	writeln(b.Out, b.TickString(width))
+}
+
+// return current progress bar string of "width" (possibly more depending on whether "Prefix" and "Suffix" take all available space)
+func (b *Bar) TickString(width int) string {
 	prefix := b.Prefix(b)
 	suffix := b.Suffix(b)
 
-	width := 80
-	if terminal.IsTerminal(int(b.out.Fd())) {
-		w, _, err := terminal.GetSize(int(b.out.Fd()))
-		if err == nil {
-			width = w
-		}
-	}
 	width -= utf8.RuneCountInString(prefix) + utf8.RuneCountInString(suffix)
 
+	if width <= 0 {
+		// if we already don't have enough space for a progress bar after subtracting Prefix and Suffix, let's force ourselves to get at least a single character
+		width = 1
+	}
+
+	// https://github.com/verigak/progress/blob/c5043685c57294129f654c4b736fe5a119b14ec9/progress/bar.py#L67-L79
+
+	progress := b.Progress()
 	filled := float64(width) * progress
 	nFull := int(filled)
 	phase := int((filled - float64(nFull)) * float64(len(b.Phases)))
@@ -102,7 +124,7 @@ func (b *Bar) TickString() string {
 		current = b.Phases[phase]
 	}
 
-	nEmpty = nEmpty-utf8.RuneCountInString(current)
+	nEmpty = nEmpty - utf8.RuneCountInString(current)
 	empty := ""
 	if nEmpty >= 0 {
 		empty = strings.Repeat(b.Phases[0], nEmpty)
@@ -115,10 +137,6 @@ func (b *Bar) TickString() string {
 		empty,
 		suffix,
 	}, "")
-}
-
-func (b *Bar) Tick() {
-	writeln(b.out, b.TickString())
 }
 
 // https://github.com/verigak/progress/blob/c5043685c57294129f654c4b736fe5a119b14ec9/progress/helpers.py#L61-L69

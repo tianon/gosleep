@@ -16,7 +16,7 @@
 		{
 			"importpath": "go.tianon.xyz/progress",
 			"repository": "https://github.com/tianon/go-progress.git",
-			"revision": "7e2b41cc4d65d89596d6e1b2b774ca51b7694795",
+			"revision": "159b6c3ea94583758e21a0566dc9dd6cc81eb20f",
 			"branch": "master"
 		},
 		{
