@@ -13,14 +13,21 @@ type Bar struct {
 	Min int64
 	Max int64
 
+	// Functions invoked by TickString for generating the text before/after a given progress string.
 	Prefix func(b *Bar) string
 	Suffix func(b *Bar) string
 
+	// The set of characters used for the progress bar display.
+	// The first phase is the implied "empty" and the final phase is the implied "full".
+	// See DefaultPhases for the default value provided by NewBar.
+	// Note: TickString assumes each of these represents a single output character.
 	Phases []string
 
 	Out *os.File
 }
 
+// Default value for "Phases" provided by NewBar.
+// This default allows for sub-character progress precision.
 var DefaultPhases = []string{
 	" ",
 	"▏",
@@ -33,7 +40,7 @@ var DefaultPhases = []string{
 	"█",
 }
 
-// create a new progress bar targeted at "out" (can be "nil" if "TickString" is intended use of bar)
+// Creates a new progress bar targeted at "out" (can be "nil" if "TickString" use is intended instead of Start/Tick/Finish).
 func NewBar(out *os.File) *Bar {
 	return &Bar{
 		Prefix: func(_ *Bar) string { return " [" },
@@ -44,14 +51,14 @@ func NewBar(out *os.File) *Bar {
 	}
 }
 
-// start progress bar output (invokes Tick())
+// Starts progress bar output (invokes Tick).
 func (b *Bar) Start() {
 	// TODO if isatty
 	//b.Out.Write([]byte("\x1b[?25l")) // hide cursor?
 	b.Tick()
 }
 
-// finish progress bar output (writes "\n")
+// Finishes progress bar output (writes "\n").
 func (b *Bar) Finish() {
 	b.Tick()
 	b.Out.Write([]byte("\n"))
@@ -59,7 +66,13 @@ func (b *Bar) Finish() {
 	//b.Out.Write([]byte("\x1b[?25h")) // show cursor?
 }
 
-// current percentage (b.Val along the line b.Min <-> b.Max), normalized to 0-100% as a 0.0-1.0 float64
+// Returns current percentage (Val along the line Min <-> Max), normalized to 0-100% as a 0.0-1.0 float64.
+//
+// The following special cases apply:
+//
+//   Min >= Max: 100%
+//   Val <  Min:   0%
+//   Val >  Max: 100%
 func (b *Bar) Progress() float64 {
 	if b.Min >= b.Max {
 		// ignore bad values like cowards
@@ -74,7 +87,7 @@ func (b *Bar) Progress() float64 {
 	return float64(b.Val-b.Min) / float64(b.Max-b.Min)
 }
 
-// width of terminal "out" or -1
+// Returns the width of terminal "out" or -1 if it is not a terminal or if the dimensions of it cannot be determined.
 func TermWidth(out *os.File) int {
 	if terminal.IsTerminal(int(out.Fd())) {
 		w, _, err := terminal.GetSize(int(out.Fd()))
@@ -85,7 +98,7 @@ func TermWidth(out *os.File) int {
 	return -1
 }
 
-// update progress bar output
+// Updates progress bar output.
 func (b *Bar) Tick() {
 	width := TermWidth(b.Out)
 	if width < 0 {
@@ -94,7 +107,7 @@ func (b *Bar) Tick() {
 	writeln(b.Out, b.TickString(width))
 }
 
-// return current progress bar string of "width" (possibly more depending on whether "Prefix" and "Suffix" take all available space)
+// Returns current progress bar string of "width" (possibly more depending on whether "Prefix" and "Suffix" take all available space).
 func (b *Bar) TickString(width int) string {
 	prefix := b.Prefix(b)
 	suffix := b.Suffix(b)
