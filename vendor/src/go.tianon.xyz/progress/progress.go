@@ -8,6 +8,8 @@ import (
 	"golang.org/x/crypto/ssh/terminal"
 )
 
+// Bar is the type representing a standard progress bar.
+// It can be used either via TickString (for explicit string generation) or Start/Tick/Finish for direct terminal/os.File output.
 type Bar struct {
 	Val int64
 	Min int64
@@ -40,7 +42,7 @@ var DefaultPhases = []string{
 	"█",
 }
 
-// Creates a new progress bar targeted at "out" (can be "nil" if "TickString" use is intended instead of Start/Tick/Finish).
+// NewBar creates a new progress bar targeted at "out" (can be "nil" if "TickString" use is intended instead of Start/Tick/Finish).
 func NewBar(out *os.File) *Bar {
 	return &Bar{
 		Prefix: func(_ *Bar) string { return " [" },
@@ -51,14 +53,14 @@ func NewBar(out *os.File) *Bar {
 	}
 }
 
-// Starts progress bar output (invokes Tick).
+// Start begins progress bar output (invokes Tick).
 func (b *Bar) Start() {
 	// TODO if isatty
 	//b.Out.Write([]byte("\x1b[?25l")) // hide cursor?
 	b.Tick()
 }
 
-// Finishes progress bar output (writes "\n").
+// Finish completes progress bar output (invokes Tick and writes "\n").
 func (b *Bar) Finish() {
 	b.Tick()
 	b.Out.Write([]byte("\n"))
@@ -66,7 +68,7 @@ func (b *Bar) Finish() {
 	//b.Out.Write([]byte("\x1b[?25h")) // show cursor?
 }
 
-// Returns current percentage (Val along the line Min <-> Max), normalized to 0-100% as a 0.0-1.0 float64.
+// Progress returns the current percentage (Val along the line Min <-> Max), normalized to 0-100% as a 0.0-1.0 float64.
 //
 // The following special cases apply:
 //
@@ -87,7 +89,7 @@ func (b *Bar) Progress() float64 {
 	return float64(b.Val-b.Min) / float64(b.Max-b.Min)
 }
 
-// Returns the width of terminal "out" or -1 if it is not a terminal or if the dimensions of it cannot be determined.
+// TermWidth returns the width of terminal "out" or -1 if it is not a terminal or if the dimensions of it cannot be determined.
 func TermWidth(out *os.File) int {
 	if terminal.IsTerminal(int(out.Fd())) {
 		w, _, err := terminal.GetSize(int(out.Fd()))
@@ -98,7 +100,7 @@ func TermWidth(out *os.File) int {
 	return -1
 }
 
-// Updates progress bar output.
+// Tick updates progress bar output.
 func (b *Bar) Tick() {
 	width := TermWidth(b.Out)
 	if width < 0 {
@@ -107,7 +109,7 @@ func (b *Bar) Tick() {
 	writeln(b.Out, b.TickString(width))
 }
 
-// Returns current progress bar string of "width" (possibly more depending on whether "Prefix" and "Suffix" take all available space).
+// TickString returns a current progress bar string of "width" (possibly more depending on whether "Prefix" and "Suffix" take all available space).
 func (b *Bar) TickString(width int) string {
 	prefix := b.Prefix(b)
 	suffix := b.Suffix(b)
@@ -124,7 +126,7 @@ func (b *Bar) TickString(width int) string {
 	progress := b.Progress()
 	filled := float64(width) * progress
 	nFull := int(filled)
-	phase := int((filled - float64(nFull)) * float64(len(b.Phases)))
+	phase := int((filled - float64(nFull)) * float64(len(b.Phases)-1))
 	nEmpty := width - nFull
 
 	full := ""
