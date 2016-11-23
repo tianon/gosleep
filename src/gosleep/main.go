@@ -16,6 +16,7 @@ type sleepFlags struct {
 }
 
 func main() {
+	// TODO  consider making "start" an optional flag
 	start := time.Now()
 
 	opts := sleepFlags{}
@@ -60,11 +61,8 @@ func main() {
 	}
 
 	// TODO consider making these optional flags
-	increment := 500 * time.Millisecond
+	interval := 100 * time.Millisecond
 	round := time.Second
-
-	start = start.Round(round)
-	until = until.Round(round)
 
 	if until.Before(start) {
 		fmt.Fprintf(os.Stderr, "error: requested sleep time in the past: %s\n", until.Sub(start))
@@ -72,24 +70,27 @@ func main() {
 	}
 
 	bar := progress.NewBar(os.Stdout)
-	bar.Min = start.Unix()
-	bar.Max = until.Unix()
+	bar.Min = start.UnixNano()
+	bar.Max = until.UnixNano()
 
 	now := start
-	bar.Val = now.Unix()
+	bar.Val = now.UnixNano()
 	bar.Prefix = func(b *progress.Bar) string {
-		return fmt.Sprintf(" %s / %s [", now.Sub(start).String(), until.Sub(start).String())
+		rNow := now.Round(round)
+		rStart := start.Round(round)
+		rUntil := until.Round(round)
+		return fmt.Sprintf(" %s / %s [", rNow.Sub(rStart).String(), rUntil.Sub(rStart).String())
 	}
 	bar.Suffix = func(b *progress.Bar) string {
 		return fmt.Sprintf("] % 3.01f%% ", b.Progress()*100)
 	}
 
 	bar.Start()
-	for now = start; now.Before(until); now = time.Now().Round(round) {
-		bar.Val = now.Unix()
+	for now = start; now.Before(until); now = time.Now() {
+		bar.Val = now.UnixNano()
 		bar.Tick()
-		time.Sleep(increment)
+		time.Sleep(interval)
 	}
-	bar.Val = now.Unix()
+	bar.Val = now.UnixNano()
 	bar.Finish()
 }
