@@ -16,13 +16,13 @@
 		{
 			"importpath": "go.tianon.xyz/progress",
 			"repository": "https://github.com/tianon/go-progress.git",
-			"revision": "2d3c15f22f9d797d90102840d6e67bc5a36de4cc",
+			"revision": "d9267b4434208cf69f4c4e56ea2618d64997ff91",
 			"branch": "master"
 		},
 		{
 			"importpath": "golang.org/x/crypto/ssh/terminal",
 			"repository": "https://go.googlesource.com/crypto",
-			"revision": "9477e0b78b9ac3d0b03822fd95422e2fe07627cd",
+			"revision": "9a6f0a01987842989747adff311d80750ba25530",
 			"branch": "master",
 			"path": "/ssh/terminal"
 		}
