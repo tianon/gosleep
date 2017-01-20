@@ -91,7 +91,7 @@ func (b *Bar) Progress() float64 {
 
 // TermWidth returns the width of terminal "out" or -1 if it is not a terminal or if the dimensions of it cannot be determined.
 func TermWidth(out *os.File) int {
-	if terminal.IsTerminal(int(out.Fd())) {
+	if out != nil && terminal.IsTerminal(int(out.Fd())) {
 		w, _, err := terminal.GetSize(int(out.Fd()))
 		if err == nil {
 			return w
@@ -100,13 +100,18 @@ func TermWidth(out *os.File) int {
 	return -1
 }
 
-// Tick updates progress bar output.
-func (b *Bar) Tick() {
+// TickWidth returns the available width for the entire progress bar (or 80 if the available width cannot be determined).
+func (b *Bar) TickWidth() int {
 	width := TermWidth(b.Out)
 	if width < 0 {
 		width = 80
 	}
-	writeln(b.Out, b.TickString(width))
+	return width
+}
+
+// Tick updates progress bar output.
+func (b *Bar) Tick() {
+	writeln(b.Out, b.TickString(b.TickWidth()))
 }
 
 // TickString returns a current progress bar string of "width" (possibly more depending on whether "Prefix" and "Suffix" take all available space).
