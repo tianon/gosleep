@@ -76,13 +76,28 @@ func main() {
 	now := start
 	bar.Val = now.UnixNano()
 	bar.Prefix = func(b *progress.Bar) string {
+		if b.TickWidth() < 50 {
+			// if we're really tight, keep it simple
+			return " ["
+		}
+
 		rNow := now.Round(round)
 		rStart := start.Round(round)
 		rUntil := until.Round(round)
+
 		return fmt.Sprintf(" %s / %s [", rNow.Sub(rStart).String(), rUntil.Sub(rStart).String())
 	}
 	bar.Suffix = func(b *progress.Bar) string {
-		return fmt.Sprintf("] %5.01f%% ", b.Progress()*100)
+		rNow := now.Round(round)
+		//rStart := start.Round(round)
+		rUntil := until.Round(round)
+
+		str := fmt.Sprintf("] %5.01f%% ", b.Progress()*100)
+		if b.TickWidth() > 100 {
+			// if we're extra wide, let's add a little extra detail
+			str += fmt.Sprintf("(%s rem) ", rUntil.Sub(rNow).String())
+		}
+		return str
 	}
 
 	bar.Start()
