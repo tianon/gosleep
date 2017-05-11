@@ -1,2 +1,5 @@
+artifacts/
 bin/
 pkg/
+vendor/bin/
+vendor/pkg/

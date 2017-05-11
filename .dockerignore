@@ -1,0 +1,6 @@
+# only explicitly include the Go sources in our built image context
+
+**
+
+!src/
+!vendor/src/
