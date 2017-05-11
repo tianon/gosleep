@@ -22,7 +22,7 @@
 		{
 			"importpath": "golang.org/x/crypto/ssh/terminal",
 			"repository": "https://go.googlesource.com/crypto",
-			"revision": "9a6f0a01987842989747adff311d80750ba25530",
+			"revision": "122d919ec1efcfb58483215da23f815853e24b81",
 			"branch": "master",
 			"path": "/ssh/terminal"
 		}
