@@ -12,7 +12,7 @@ now.BeginningOfDay()
 #### But `now` is so common I can't search the project with my favorite search engine
 
 * Star it in github [https://github.com/jinzhu/now](https://github.com/jinzhu/now)
-* Search it with [http://godoc.org](http://godoc.org)
+* Documentation at [godoc.org](https://godoc.org/github.com/jinzhu/now)
 
 ## Install
 
@@ -90,6 +90,12 @@ now.TimeFormats = append(now.TimeFormats, "02 Jan 2006 15:04")
 ```
 
 Please send me pull requests if you want a format to be supported officially
+
+
+# Supporting the project
+
+[![http://patreon.com/jinzhu](http://patreon_public_assets.s3.amazonaws.com/sized/becomeAPatronBanner.png)](http://patreon.com/jinzhu)
+
 
 # Author
 

@@ -4,13 +4,13 @@
 		{
 			"importpath": "github.com/jessevdk/go-flags",
 			"repository": "https://github.com/jessevdk/go-flags",
-			"revision": "8bc97d602c3bfeb5fc6fc9b5a9c898f245495637",
+			"revision": "460c7bb0abd6e927f2767cadc91aa6ef776a98b4",
 			"branch": "master"
 		},
 		{
 			"importpath": "github.com/jinzhu/now",
 			"repository": "https://github.com/jinzhu/now",
-			"revision": "d9861969c7a7e84746d341c09020c2ef8a617f8f",
+			"revision": "d939ba741945c047cac69c329c5fb0d6b4a06520",
 			"branch": "master"
 		},
 		{
