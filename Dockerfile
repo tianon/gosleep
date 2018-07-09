@@ -1,4 +1,4 @@
-FROM alpine:3.5
+FROM alpine:3.7
 
 ENV GOSLEEP_VERSION 1.0
 
