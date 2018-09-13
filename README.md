@@ -29,7 +29,7 @@ $ gosleep --until 14:39
 $ gosleep --until '2016-11-17 00:00:00'
 error: requested sleep time in the past: -638h39m3.910603384s
 $ gosleep --until '2017-01-01 00:00:00'
-^C8s / 441h20m45s [                                                    ]   0.0% 
+ 8s / 441h20m45s [                                                    ]   0.0% 
 $ gosleep --until '2016-12-13 17:00'
  22s / 2h19m6s [▏                                                      ]   0.3% 
 ```
