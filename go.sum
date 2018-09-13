@@ -1,0 +1,10 @@
+github.com/jessevdk/go-flags v1.4.0 h1:4IU2WS7AumrZ/40jfhf4QVDMsQwqA7VEHozFRrGARJA=
+github.com/jessevdk/go-flags v1.4.0/go.mod h1:4FA24M0QyGHXBuZZK/XkWh8h0e1EYbRYJSGM75WSRxI=
+github.com/jinzhu/now v0.0.0-20170212112655-d939ba741945 h1:Zi6ebPFqt/hiMTrjyLoZZHEn5bR3fX537mXN+rIDpF4=
+github.com/jinzhu/now v0.0.0-20170212112655-d939ba741945/go.mod h1:oHTiXerJ20+SfYcrdlBO7rzZRJWGwSTQ0iUY2jI6Gfc=
+go.tianon.xyz/progress v0.0.0-20170120223140-598c27a6e143 h1:dZ/2ugXA/dueKFrMTjLlTtGP2rQzeE2xFG7L26TvKqs=
+go.tianon.xyz/progress v0.0.0-20170120223140-598c27a6e143/go.mod h1:gOmH67wFTceqw7TNWHsDadU1G+M5WfsUxx/sZD7U7VM=
+golang.org/x/crypto v0.0.0-20170508154713-122d919ec1ef h1:d2tqXXNGYBAXdgY8uW0elN41jKkvIz/XJd28ljzxAtM=
+golang.org/x/crypto v0.0.0-20170508154713-122d919ec1ef/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
+golang.org/x/sys v0.0.0-20180909124046-d0be0721c37e h1:o3PsSEY8E4eXWkXrIP9YJALUkVZqzHJT5DOasTyn8Vs=
+golang.org/x/sys v0.0.0-20180909124046-d0be0721c37e/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
