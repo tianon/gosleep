@@ -1,14 +1,12 @@
-FROM alpine:3.7
+FROM alpine:3.8
 
 ENV GOSLEEP_VERSION 1.0
 
 RUN set -ex; \
 	\
 	apk add --no-cache --virtual .fetch-deps \
-		ca-certificates \
 		dpkg \
 		gnupg \
-		libressl \
 	; \
 	\
 	dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')"; \
