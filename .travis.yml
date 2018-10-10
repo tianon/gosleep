@@ -1,0 +1,6 @@
+language: go
+go:
+    - 1.11.x
+
+install: GO111MODULE=on go install -v ./...
+script: gosleep --for 5s
