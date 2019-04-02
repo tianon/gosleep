@@ -1,0 +1,31 @@
+strategy:
+  matrix:
+    linux:
+      azureImage: 'ubuntu-16.04'
+      dockerImage: 'golang:1.12-stretch'
+      dockerHostPath: '"$PWD"'
+      dockerContPath: '/gosleep'
+    windows:
+      azureImage: 'win1803'
+      dockerImage: 'golang:1.12-windowsservercore-1803'
+      dockerHostPath: '"$(cygpath --absolute --windows "$PWD")"'
+      dockerContPath: 'C:\\gosleep'
+
+pool:
+  vmImage: $(azureImage)
+
+steps:
+- bash: |
+    set -Eeuo pipefail -x
+    docker pull $(dockerImage)
+  displayName: 'Pull build image'
+
+- bash: |
+    set -Eeuo pipefail -x
+    docker run --rm -v $(dockerHostPath):$(dockerContPath) -w $(dockerContPath) $(dockerImage) go build -v .
+  displayName: 'Build a binary'
+
+- bash: |
+    set -Eeuo pipefail -x
+    ./gosleep --for 5s
+  displayName: 'Test built binary'
