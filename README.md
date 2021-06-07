@@ -2,8 +2,6 @@
 
 `sleep(1)`, but with Go duration parsing (`1m`, `2h3m2s`) OR explicit time to sleep until (`13:04`, `2016-11-18 00:00:00`) and a progress bar.
 
-[![Build Status](https://travis-ci.org/tianon/gosleep.svg?branch=master)](https://travis-ci.org/tianon/gosleep)
-
 # Example
 
 ![example animated GIF](example.gif)
