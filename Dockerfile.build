@@ -11,7 +11,7 @@ RUN mkdir -pv /artifacts
 
 WORKDIR /usr/src/gosleep
 COPY go.mod go.sum ./
-RUN go mod download && go mod verify
+RUN go mod download
 COPY . .
 
 # gosleep-$(dpkg --print-architecture | awk -F- '{ print $NF }')
