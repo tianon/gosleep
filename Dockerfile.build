@@ -1,11 +1,17 @@
-FROM golang:1.15-alpine3.12
+FROM golang:1.20-bookworm
 
-RUN apk add --no-cache file git
+RUN set -eux; \
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
+		file \
+		time \
+	; \
+	rm -rf /var/lib/apt/lists/*
 
 # disable CGO for ALL THE THINGS (to help ensure no libc)
 ENV CGO_ENABLED 0
 
-ENV BUILD_FLAGS="-v -ldflags '-d -s -w'"
+ENV BUILD_FLAGS="-v -trimpath -ldflags '-d -w'"
 
 RUN mkdir -pv /artifacts
 
