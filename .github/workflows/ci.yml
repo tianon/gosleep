@@ -13,7 +13,7 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: tianon/actions/checkout/composite@581498642ee39d41dc3a801d22b3f7f42a95acc7 # HEAD
       - run: ./build.sh
       - run: ./artifacts/gosleep-amd64 --for 5s
       - run: ./artifacts/gosleep-i386 --for 5s
